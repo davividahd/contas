@@ -1,32 +1,46 @@
 import { buscarTitulares } from './module/titular.js';
 import { Conta } from './module/conta.js';
-let titulares= buscarTitulares();
+import express from 'express';
+import { buscarcontas } from './module/titular.js';
+import { autenticar } from './module/conta.js'
+const app = express()
+{
+    let titulares = buscarTitulares();
+
+    console.log(titulares);
+
+
+    app.get('/', function (req, res) {
+        let contas = buscarcontas(titulares)
+        res.json(contas)
+
+
+
+
+    })
+
+    app.get('/autenticar/:agencia/:numero/:senha', function (req, res) {
+        let agencia = parseInt(req.params.agencia)
+        let numero = parseInt(req.params.numero)
+        let senha = parseInt(req.params.senha)
+        res.json({agencia, numero, senha})
+      
+        contas.forEach(conta => {
+        if (conta.numeroConta == numero && conta.agencia == agencia && conta.senha == senha) {
+            res.json({resp:true})
+        }
+        else {
+            res.json({resp:false})
+        }
+       });
+        
+
+        let titulares = buscarTitulares()
+        let contas = buscarcontas(titulares)
+        res.json(contas)
+    })
    
-console.log(titulares);
+}
 
-let c1 = new Conta(
-    11,
-    1,
-    1000,
-    1,
-    titulares[0]
-)
+app.listen(3000)
 
-let c2 = new Conta(
-    11,
-    2,
-    2000,
-    2,
-    titulares[1]
-)
-
-let c3 = new Conta(
-    11,
-    3,
-    3000,
-    3,
-    titulares[2]
-)
-
-let contas = [c1,c2,c3]
-console.log(contas);
